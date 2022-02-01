@@ -1,0 +1,16 @@
+{
+  "watch": [
+    "src/"
+  ],
+  "ext": "ts",
+  "ignore": [
+    "*.tests.ts",
+    ".git",
+    "node_modules/**"
+  ],
+  "verbose": true,
+  "delay": "1",
+  "execMap": {
+    "ts": "node --require ts-node/register"
+  }
+}

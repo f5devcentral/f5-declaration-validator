@@ -1,0 +1,26 @@
+# Source directory
+src/
+# Tests directory
+tests/
+# Coverage directory
+coverage/
+# Code Documentation directory
+code_docs/
+# Local Documentation directory
+docs/
+# NYC Output directory
+.nyc_output/
+# Git Allowed File
+.gitallowed
+# CI File
+.gitlab-ci.yml
+# local env file
+.env
+# f5 cache directory
+f5_cache/
+# any other npm pack files
+f5-conx-core-*.tgz
+# nodemon config file
+nodemon.json
+# vscode config
+.vscode/

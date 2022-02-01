@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+# Package build directory
+dist/
+# Coverage directory
+coverage/
+# Code documentation directory
+code_docs/
+# Test harness Files
+deployment_info.json
+# NYC output directory
+.nyc_output/
+# Temp Files
+tmp_*
+# more f5 temp files
+f5_cache/
+# local env file
+.env
+tests/tmp/*
+
