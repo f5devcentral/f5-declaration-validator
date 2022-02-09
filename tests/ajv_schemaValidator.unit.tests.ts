@@ -18,6 +18,12 @@ import {
     tsExampleDec
 } from 'f5-conx-core';
 
+import as3Schema from '../src/schemas/as3Schema.json';
+import deviceSchema from '../src/schemas/deviceSchema.json';
+import doSchema from '../src/schemas/doSchema.json';
+import tsSchema from '../src/schemas/tsSchema.json';
+import cfSchema from '../src/schemas/cfSchema.json';
+
 
 const logger = new Logger('F5_CONX_CORE_LOG_LEVEL');
 logger.console = false;
@@ -43,10 +49,15 @@ describe('schema validator Unit Tests', function () {
     before(async function () {
         // log test file name - makes it easer for troubleshooting
         console.log('       file:', __filename)
+            as3Validator = as3.compile(as3Schema)
+            doValidator = doV.compile(deviceSchema)
+            doQValidator = doV.compile(doSchema)
+            tsValidator = ts.compile(tsSchema)
+            cfValidator = cf.compile(cfSchema)
 
-        await axios.get(atcMetaData.as3.schema).then( resp => {
-            as3Validator = as3.compile(resp.data)
-        })
+        // await axios.get(atcMetaData.as3.schema).then( resp => {
+        //     as3Validator = as3.compile(resp.data)
+        // })
         // await axios.get(atcMetaData.do.schema).then( resp => {
         //     // do breaks with error;
         //     // can't resolve reference system.schema.json# from id https://raw.githubusercontent.com/F5Networks/f5-declarative-onboarding/master/schema/base.schema.json
@@ -61,9 +72,9 @@ describe('schema validator Unit Tests', function () {
         //     // ts breaks with error;
         //     // can't resolve reference system_schema.json# from id base_schema.json
         //     tsValidator = ts.compile(resp.data)
-        await axios.get(atcMetaData.cf.schema).then( resp => {
-            cfValidator = cf.compile(resp.data)
-        })
+        // await axios.get(atcMetaData.cf.schema).then( resp => {
+        //     cfValidator = cf.compile(resp.data)
+        // })
     })
 
     beforeEach(function () {

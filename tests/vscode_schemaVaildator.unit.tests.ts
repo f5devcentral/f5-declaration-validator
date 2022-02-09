@@ -69,7 +69,7 @@ describe('JSON Schema', function () {
     it('bad as3 dec', async function () {
         const results = await validate({
             "class": "AS3",
-            "action": "ded",
+            "action": "breaking",
             "persist": true,
         }, JSON.stringify(as3Schema))
         assert.ok(results.length > 0)
@@ -112,11 +112,3 @@ describe('JSON Schema', function () {
         assert.ok(results.length === 0)
     });
 });
-
-
-const as3_bad =
-{
-    "class": "AS3",
-    "action": "ded",
-    "persist": true,
-}
