@@ -26,11 +26,16 @@
   "dependencies": {
     "axios": "^0.25.0",
     "f5-conx-core": "^0.12.4",
+    "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "koa-router": "^10.1.1",
     "vscode-json-languageservice": "^4.2.0"
   },
   "devDependencies": {
     "@types/assert": "^1.5.4",
     "@types/deepmerge": "^2.2.0",
+    "@types/koa": "^2.13.4",
+    "@types/koa-router": "^7.4.4",
     "@types/mocha": "^8.2.3",
     "@types/node": "^14.14.37",
     "@typescript-eslint/eslint-plugin": "^4.20.0",

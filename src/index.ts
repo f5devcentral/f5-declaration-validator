@@ -3,7 +3,7 @@
 
 
 import { atcMetaData } from 'f5-conx-core';
-import Logger from 'f5-conx-core/dist/logger';
+
 import { Diagnostic, getLanguageService, TextDocument } from "vscode-json-languageservice";
 
 
@@ -89,9 +89,11 @@ export async function decType(dec: Record<string, unknown>): Promise<{
 }> {
 
     if (validParentClasses.includes(dec.class as ParentClasses)) {
+        // get and stringify the schema
+        const schema = JSON.stringify(validClasses[dec.class as ParentClasses])
         return  {
             type: dec.class as string,
-            schema: validClasses[dec.class as string]
+            schema
         }
     } else {
         throw Error(`not a valid f5 declaration, looking for ${JSON.stringify(validParentClasses)} as parent class`)
