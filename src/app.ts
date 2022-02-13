@@ -7,7 +7,8 @@ import koaBody from 'koa-body';
 import Logger from 'f5-conx-core/dist/logger';
 import { validate } from '.';
 
-// import pjson from '../package.json'
+// set port or use default
+const port = process.argv[2] || 3030
 
 const log = new Logger('F5_DECLARATION_VALIDATOR_REST_LOG')
 log.console = true;
@@ -40,17 +41,6 @@ app.use(async (ctx, next) => {
     await next();
 });
 
-// app.use(async (ctx, next) => {
-//     // redirect any undefined paths to info
-//     if (ctx.response.status === 404 && ctx.request.path !== '/info') {
-//         return ctx.redirect('/info')
-//     }
-//     await next();
-// });
-
-// router.get('/', async (ctx) => {
-//     ctx.body = 'Hello World!';
-// });
 
 router.get('/info', async (ctx) => {
 
@@ -65,21 +55,47 @@ router.get('/info', async (ctx) => {
 });
 
 router.post('/validate', async (ctx) => {
+
     // capture the post body
     const dec = ctx.request.body;
+
     // validate and capture any errors
-    const diagnostics = await validate(dec)
-    // set valid flag
-    const valid = diagnostics.length > 0 ? false : true;
+    const resp = await validate(dec)
+    .then( diagnostics => {
+        if(diagnostics.length > 0){
+            // was able to parse and read ATC declaration, but invalid
+            return {
+                valid: false,
+                diagnostics
+            }
+        } else {
+            // valid declaration
+            return {
+                valid: true,
+                diagnostics
+            }
+        }
+    })
+    .catch( e => {
+        return {
+            valid: false,
+            diagnostics: [
+                'not able to parse or discover atc delcaration type',
+                'does the parent object class contain: AS3, ADC, DO, Device, Telemetry, or Cloud_Failover?'
+            ]
+        }
+    })
     // respond back to client with details
-    ctx.response.body = {
-        valid,
-        diagnostics
-    }
+    ctx.response.body = resp
 });
+
+router.all('/', async (ctx) => {
+    ctx.redirect('/info');
+    ctx.status = 301;
+})
 
 app.use(router.routes());
 
-app.listen(3000);
-
-console.log('Server running on port 3000');
+app.listen(port, () => {
+    log.info(`started ${process.env.npm_package_name} service on: ${port}`)
+})
