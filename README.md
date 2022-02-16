@@ -16,17 +16,28 @@ The second package is **vscode-json-languageservice** (<https://github.com/micro
 
 This projects contributes the following;
 
-- JS/TS library function "validate" which will discovery ATC declaration type and validate it against the appropriate schema
-- A REST API, endpoint '/validate' that will also validate an ATC declaration using above function
+- JS/TS library
+  - "validate" function, which will accept a json string, attempt to discover ATC declaration type and validate it against the appropriate schema
+- A REST API
+  - /validate - endpoint that will also validate an ATC declaration using above function
+  - /info - endpoint for providing information about the project/package
+    - Any unknown api endpoint request will get redirected here
+    - Also includes a listing of all api endpoints for quick visibility
 
-## enhancements
+## Future Enhancements
 
+### *not prioritized*
+
+- Extended schema "linting/recommendations"
+  - See linting section
 - Telemetry
 - CLI for consumption flexibility and git action integration
 - containerize for orchestration
 - Round out support for DO/TS and even DWAF
 - Host in F5 Distributed Cloud?
 - UI?
+  - paste declaration and see the output
+- SWAGGER file?
 
 ## ATC declaration validation code references
 
@@ -85,7 +96,14 @@ The idea here is to extend the json validation with linting daignostics to provi
 
 For example;  If a certificate body is found in a declaration.  While it is technically supported, it is recommended to manage certs through a secret store the declration should reference
 
+- extending schema validation with suggestions #126
+  - <https://github.com/microsoft/vscode-json-languageservice/issues/126>
+
 ## TerraForm TASKS integration info
+
+One need is to integrate this tool with TerraForm Tasks to provide more planning intelligence.  Documentation on how to do this is blow.
+
+During discussions someone asked if we could bake this into the TF provider and not have to have an external service?
 
 - Blog: Terraform Cloud Run Tasks Beta Now Available
   - <https://www.hashicorp.com/blog/terraform-cloud-run-tasks-beta-now-available>
@@ -95,3 +113,7 @@ For example;  If a certificate body is found in a declaration.  While it is tech
   - <https://www.terraform.io/cloud-docs/api-docs/run-tasks>
 - Terraform Cloud Run Tasks Integration
   - <https://www.terraform.io/cloud-docs/integrations/run-tasks>
+
+## support
+
+This project is open source and community supported.  Any questions, comments, and/or feature requests please open an issue.
