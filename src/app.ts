@@ -1,22 +1,23 @@
 'use strict';
 
+import https from 'https';
 import Koa from 'koa';
 import Router from 'koa-router';
 import koaBody from 'koa-body';
 
 import Logger from 'f5-conx-core/dist/logger';
 import { validate } from '.';
+import { getCert, settings } from './settings';
 
 // set port or use default
-const port = process.argv[2] || 3030
+// const port = process.argv[2] || 3030
 
-const log = new Logger('F5_DECLARATION_VALIDATOR_REST_LOG')
+export const log = new Logger('F5_DECLARATION_VALIDATOR_REST_LOG')
 log.console = true;
 
 const app = new Koa();
 const router = new Router();
 
-const p = process.env;
 
 // inject logger and body parser into app
 // app.use(logger());
@@ -96,6 +97,10 @@ router.all('/', async (ctx) => {
 
 app.use(router.routes());
 
-app.listen(port, () => {
-    log.info(`started ${process.env.npm_package_name} service on: ${port}`)
+// get the cert/key from settings
+const { cert, key } = getCert(settings.cert, settings.cert_key)
+
+// start the server with tls
+https.createServer({ cert, key}, app.callback()).listen(settings.port, () => {
+    log.info(`started ${settings.appName} service on https port: ${settings.port}`)
 })

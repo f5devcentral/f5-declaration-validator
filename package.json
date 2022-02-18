@@ -8,6 +8,7 @@
     "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'tests/**/*.{js,ts,tsx}'",
     "watch": "tsc -watch -p ./",
     "compile": "tsc -p ./",
+    "server": "dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:debug": "nodemon --inspect src/app.ts",
     "build-package": "npm run compile && npm pack",
