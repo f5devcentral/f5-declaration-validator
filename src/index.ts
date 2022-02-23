@@ -28,6 +28,12 @@ const validClasses = {
     Cloud_Failover: cfSchema
 }
 
+export type ValidateOut = {
+    valid: boolean,
+    diagnostics: string[],
+    dec: Record<string, unknown>
+}
+
 /**
  * discover F5 ATC declaration type and validate with schema
  * 
@@ -36,7 +42,7 @@ const validClasses = {
  * @param dec ATC declaration
  * @returns 
  */
-export async function validate(dec: Record<string, unknown>): Promise<Diagnostic[]> {
+export async function validate(dec: Record<string, unknown>): Promise<ValidateOut> {
 
     // delete schema reference if it's there
     delete dec.$schema;
@@ -70,10 +76,17 @@ export async function validate(dec: Record<string, unknown>): Promise<Diagnostic
     const diagnostics = await jsonLanguageService.doValidation(textDocument, jsonDocument);
     console.log('Validation results:', diagnostics.map(d => `[line ${d.range.start.line}] ${d.message}`));
 
-    return diagnostics;
+    const valid = diagnostics.length > 0 ? true : false;
+    const simpleDiags = diagnostics.map(d => `[line ${d.range.start.line}] ${d.message}`);
+
+    return {
+        valid,
+        diagnostics: simpleDiags,
+        dec
+    }
 }
 
-
+// export {run} from '@oclif/command';
 
 
 

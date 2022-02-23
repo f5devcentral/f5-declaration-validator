@@ -1,0 +1,37 @@
+{
+    "class": "DO",
+    "declaration": {
+        "schemaVersion": "1.5.0",
+        "class": "Device",
+        "async": true,
+        "Common": {
+            "class": "Tenant",
+            "myProvision": {
+                "ltm": "nominal",
+                "class": "Provision"
+            },
+            "admin": {
+                "class": "User",
+                "userType": "regular",
+                "password": "privatepassword",
+                "partitionAccess": {
+                    "all-partitions": {
+                        "role": "admin"
+                    }
+                }
+            },
+            "hostname": "aws.ve.do.demo"
+        }
+    },
+    "targetUsername": "admin",
+    "targetHost": "54.10.10.10",
+    "targetSshKey": {
+        "path": "/var/ssh/restnoded/private.pem"
+    },
+    "bigIqSettings": {
+        "failImportOnConflict": false,
+        "conflictPolicy": "USE_BIGIQ",
+        "deviceConflictPolicy": "USE_BIGIP",
+        "versionedConflictPolicy": "KEEP_VERSION"
+    }
+}

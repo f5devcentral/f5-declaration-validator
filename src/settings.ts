@@ -5,38 +5,51 @@ import fs from 'fs';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: 
-import pjson from '../package.json';
+import packageJson from '../package.json';
 
 import { log } from './app'
 
-const env = process.argv.slice(2);
+// export const pjson = packageJson;
 
-export const settings = {
-    port: 3030,
-    appName: pjson.name,
-    cert: `./${pjson.name}.cert`,
-    cert_key: `./${pjson.name}.key`
+
+
+export class Settings {
+
+    pjson;
+    args;
+    port;
+    cert;
+    cert_key;
+
+    constructor(args: string[]) {
+        this.pjson = packageJson;
+        args = args;
+        this.port = 3030;
+        this.cert = `${packageJson.name}.crt`;
+        this.cert_key = `${packageJson.name}.key`;
+
+        args.map(s => {
+            const [key, value] = s.split('=');
+        
+            if (key === '--port') {
+                log.info(`got port flag ${value}`);
+                this.port = parseInt(value);
+            }
+            if (key === '--cert') {
+                log.info(`got cert flag ${value}`);
+                this.cert = value;
+            }
+            if (key === '--cert_key') {
+                log.info(`got cert_key flag ${value}`);
+                this.cert_key = value;
+            }
+        
+        })
+
+    }
 }
 
-env.map(s => {
-    const [k, v] = s.split('=');
 
-    if (k === 'port') {
-        log.info(`got port flag ${v}`);
-        settings.port = parseInt(v);
-    }
-    if (k === 'cert') {
-        log.info(`got cert flag ${v}`);
-        settings.cert = v;
-    }
-    if (k === 'cert_key') {
-        log.info(`got cert_key flag ${v}`);
-        settings.cert_key = v;
-    }
-
-    log.info(`settings: ${JSON.stringify(settings)}`)
-
-})
 
 
 /**
@@ -46,9 +59,14 @@ env.map(s => {
  * @param cert certificate file path
  * @param key matching certificate key file path
  */
-export function getCert(cert: string, key: string) {
+export function getCert(settings: Settings) {
 
-    const certGenCmd = `openssl req -x509 -nodes -days 3650 -newkey 2056 -subj '/CN=${settings.appName}' -keyout ${settings.appName}.key -out ${settings.appName}.crt`
+    const appName = settings.pjson.name;
+    let cert = settings.cert;
+    let key = settings.cert_key;
+
+    const certGenCmd = `openssl req -x509 -nodes -days 3650 -newkey 2056 -subj \
+    '/CN=${appName}' -keyout ${appName}.key -out ${appName}.crt`
 
     //try to load the cert/key specified in the settings
     try {
@@ -58,13 +76,13 @@ export function getCert(cert: string, key: string) {
     } catch (e) {
 
         // cert/key specified not found, generate default 
-        log.error(`specified cert/key not found;  cert:${settings.cert}, cert_key:${settings.cert_key}, generating new cert/key pair`)
+        log.error(`specified cert/key not found;  cert:${cert}, cert_key:${key}, generating new cert/key pair`)
 
         try {
             const gen = execSync(certGenCmd).toString();
             log.info(`new cert/key generated`, gen);
-            cert = fs.readFileSync(`${settings.appName}.crt`).toString();
-            key = fs.readFileSync(`${settings.appName}.key`).toString();
+            cert = fs.readFileSync(cert).toString();
+            key = fs.readFileSync(key).toString();
             return { cert, key }
         } catch (e) {
             throw Error(e);

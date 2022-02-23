@@ -4,6 +4,8 @@ This is the exploration of using external tools to validate F5 ATC declartions f
 
 The idea is to provide a tool/function that will validate ANY f5 declaration.  A simple javascript package/function/library that could be easily integrated into any other project.
 
+code-name: vera (italian for "true")
+
 ## Research
 
 Two different packages are explored within this tool.  
@@ -23,6 +25,14 @@ This projects contributes the following;
   - /info - endpoint for providing information about the project/package
     - Any unknown api endpoint request will get redirected here
     - Also includes a listing of all api endpoints for quick visibility
+
+## examples
+
+### validate as3 declaration
+
+```bash
+
+```
 
 ## Future Enhancements
 

@@ -7,13 +7,14 @@ import koaBody from 'koa-body';
 
 import Logger from 'f5-conx-core/dist/logger';
 import { validate } from '.';
-import { getCert, settings } from './settings';
-
-// set port or use default
-// const port = process.argv[2] || 3030
+import { getCert, Settings } from './settings';
 
 export const log = new Logger('F5_DECLARATION_VALIDATOR_REST_LOG')
 log.console = true;
+
+// load and export settings
+export const settings = new Settings(process.argv.slice(2));
+
 
 const app = new Koa();
 const router = new Router();
@@ -24,7 +25,7 @@ const router = new Router();
 app.use(koaBody());
 
 // Generic error handling middleware.
-app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
+app.use(async (ctx: Koa.Context, next: () => Promise<unknown>) => {
     try {
         await next();
     } catch (error: any) {
@@ -47,10 +48,10 @@ router.get('/info', async (ctx) => {
 
     const routes = router.stack.map(r => r.path)
     ctx.body = {
-        appName: process.env.npm_package_name,
-        version: process.env.npm_package_version,
-        license: process.env.npm_package_license,
-        homepage: process.env.npm_package_homepage,
+        appName: settings.pjson.name,
+        version: settings.pjson.version,
+        license: settings.pjson.license,
+        homepage: settings.pjson.homepage,
         routes
     };
 });
@@ -62,28 +63,15 @@ router.post('/validate', async (ctx) => {
 
     // validate and capture any errors
     const resp = await validate(dec)
-    .then( diagnostics => {
-        if(diagnostics.length > 0){
-            // was able to parse and read ATC declaration, but invalid
-            return {
-                valid: false,
-                diagnostics
-            }
-        } else {
-            // valid declaration
-            return {
-                valid: true,
-                diagnostics
-            }
-        }
-    })
+    .then( diagnostics => diagnostics )
     .catch( e => {
         return {
             valid: false,
             diagnostics: [
                 'not able to parse or discover atc delcaration type',
                 'does the parent object class contain: AS3, ADC, DO, Device, Telemetry, or Cloud_Failover?'
-            ]
+            ],
+            dec
         }
     })
     // respond back to client with details
@@ -98,9 +86,9 @@ router.all('/', async (ctx) => {
 app.use(router.routes());
 
 // get the cert/key from settings
-const { cert, key } = getCert(settings.cert, settings.cert_key)
+const { cert, key } = getCert(settings)
 
 // start the server with tls
 https.createServer({ cert, key}, app.callback()).listen(settings.port, () => {
-    log.info(`started ${settings.appName} service on https port: ${settings.port}`)
+    log.info(`started ${settings.pjson.name} service on https port: ${settings.port}`)
 })

@@ -17,4 +17,5 @@ f5_cache/
 # local env file
 .env
 tests/tmp/*
-
+# ignore default cert/key
+f5-declaration-validator.*
