@@ -11,12 +11,10 @@ import { log } from './app'
 
 // export const pjson = packageJson;
 
-
-
 export class Settings {
 
     pjson;
-    args;
+    args: any;
     port;
     cert;
     cert_key;
@@ -28,23 +26,47 @@ export class Settings {
         this.cert = `${packageJson.name}.crt`;
         this.cert_key = `${packageJson.name}.key`;
 
-        args.map(s => {
-            const [key, value] = s.split('=');
+        const a = args[0]
+        const b = args[1]
+        const c = args[2]
         
-            if (key === '--port') {
-                log.info(`got port flag ${value}`);
-                this.port = parseInt(value);
-            }
-            if (key === '--cert') {
-                log.info(`got cert flag ${value}`);
-                this.cert = value;
-            }
-            if (key === '--cert_key') {
-                log.info(`got cert_key flag ${value}`);
-                this.cert_key = value;
-            }
+        log.info(`spawn args: ${JSON.stringify(args)}`)
+
+        // filter "undefined" strings from the command instantiation
+        args = args.filter(i => i !== "undefined")
+
+        if(args[0]) {
+            this.port = parseInt(args[0]);
+        }
+
+        if(args[1]) {
+            this.cert = args[1];
+        }
+
+        if(args[2]) {
+            this.cert_key = args[2];
+        }
+// const port = args[0];
+// const cert = process.argv[3];
+// const key = process.argv[4];
+
+        // args.map(s => {
+        //     const [key, value] = s.split('=');
         
-        })
+        //     if (key === '--port') {
+        //         log.info(`got port flag ${value}`);
+        //         this.port = parseInt(value);
+        //     }
+        //     if (key === '--cert') {
+        //         log.info(`got cert flag ${value}`);
+        //         this.cert = value;
+        //     }
+        //     if (key === '--cert_key') {
+        //         log.info(`got cert_key flag ${value}`);
+        //         this.cert_key = value;
+        //     }
+        
+        // })
 
     }
 }
@@ -68,6 +90,8 @@ export function getCert(settings: Settings) {
     const certGenCmd = `openssl req -x509 -nodes -days 3650 -newkey 2056 -subj \
     '/CN=${appName}' -keyout ${appName}.key -out ${appName}.crt`
 
+    log.info(`loading tls cert: ${cert}, and key: ${key}`)
+
     //try to load the cert/key specified in the settings
     try {
         cert = fs.readFileSync(cert).toString();
@@ -85,7 +109,7 @@ export function getCert(settings: Settings) {
             key = fs.readFileSync(key).toString();
             return { cert, key }
         } catch (e) {
-            throw Error(e);
+                throw Error(e);
         }
     }
 }

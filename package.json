@@ -1,6 +1,6 @@
 {
   "name": "f5-declaration-validator",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "f5 atc declaration validator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
     "watch": "tsc -watch -p ./",
     "compile": "tsc -p ./",
     "server": "dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc --extension .ts mocha --timeout 20000 --forbid-only \"tests/**/*.tests.ts\"",
     "dev:debug": "nodemon --inspect src/app.ts",
     "build-package": "npm run compile && npm pack",
     "publish": "npm run compile && npm publish"
@@ -28,7 +28,18 @@
   },
   "oclif": {
     "bin": "f5-dv",
-    "commands": "./dist/commands"
+    "commands": "./dist/commands",
+    "additionalHelpFlags": [
+      "-h"
+    ],
+    "additionalVersionFlags": [
+      "-v"
+    ],
+    "plugins": [
+      "@oclif/plugin-version",
+      "@oclif/plugin-help",
+      "@oclif/plugin-commands"
+    ]
   },
   "files": [
     "/bin",
@@ -39,12 +50,15 @@
   "homepage": "https://github.com/DumpySquare/f5-declaration-validator#readme",
   "dependencies": {
     "@oclif/core": "^1.3.4",
+    "@oclif/plugin-commands": "^2.1.0",
     "@oclif/plugin-help": "^5.1.11",
     "@oclif/plugin-plugins": "^2.1.0",
+    "@oclif/plugin-version": "^1.0.4",
     "axios": "^0.25.0",
     "f5-conx-core": "^0.12.4",
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",
+    "koa-logger": "^3.2.1",
     "koa-router": "^10.1.1",
     "vscode-json-languageservice": "^4.2.0"
   },
@@ -52,6 +66,7 @@
     "@oclif/test": "^2.1.0",
     "@types/assert": "^1.5.4",
     "@types/deepmerge": "^2.2.0",
+    "@types/fs-extra": "^9.0.13",
     "@types/koa": "^2.13.4",
     "@types/koa-router": "^7.4.4",
     "@types/mocha": "^8.2.3",

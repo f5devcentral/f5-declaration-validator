@@ -26,6 +26,133 @@ This projects contributes the following;
     - Any unknown api endpoint request will get redirected here
     - Also includes a listing of all api endpoints for quick visibility
 
+## Usage
+
+<!-- usage -->
+```sh-session
+$ npm install -g f5-declaration-validator
+$ f5-dv COMMAND
+running command...
+$ f5-dv (--version|-v)
+f5-declaration-validator/1.0.0 linux-x64 node-v14.18.2
+$ f5-dv --help [COMMAND]
+USAGE
+  $ f5-dv COMMAND
+...
+```
+<!-- usagestop -->
+
+## Commands
+
+<!-- commands -->
+* [`f5-dv commands`](#f5-dv-commands)
+* [`f5-dv help [COMMAND]`](#f5-dv-help-command)
+* [`f5-dv service`](#f5-dv-service)
+* [`f5-dv validate [DEC]`](#f5-dv-validate-dec)
+* [`f5-dv version`](#f5-dv-version)
+
+## `f5-dv commands`
+
+list all the commands
+
+```
+USAGE
+  $ f5-dv commands [--json] [-h] [--hidden] [--columns <value> | -x] [--sort <value>] [--filter <value>]
+    [--output csv|json|yaml |  | [--csv | --no-truncate]] [--no-header | ]
+
+FLAGS
+  -h, --help         Show CLI help.
+  -x, --extended     show extra columns
+  --columns=<value>  only show provided columns (comma-separated)
+  --csv              output is csv format [alias: --output=csv]
+  --filter=<value>   filter property by partial string matching, ex: name=foo
+  --hidden           show hidden commands
+  --no-header        hide table header from output
+  --no-truncate      do not truncate output to fit screen
+  --output=<option>  output in a more machine friendly format
+                     <options: csv|json|yaml>
+  --sort=<value>     property to sort by (prepend '-' for descending)
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  list all the commands
+```
+
+_See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v2.1.0/src/commands/commands.ts)_
+
+## `f5-dv help [COMMAND]`
+
+Display help for f5-dv.
+
+```
+USAGE
+  $ f5-dv help [COMMAND] [-n]
+
+ARGUMENTS
+  COMMAND  Command to show help for.
+
+FLAGS
+  -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for f5-dv.
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.11/src/commands/help.ts)_
+
+## `f5-dv service`
+
+start F5 ATC declaration REST API Service
+
+```
+USAGE
+  $ f5-dv service [-h] [-p <value>] [-c <value>] [-k <value>]
+
+FLAGS
+  -c, --cert=<value>  path to cert
+  -h, --help          Show CLI help.
+  -k, --key=<value>   path to cert-key
+  -p, --port=<value>  [default: 3030] port to run service on
+
+DESCRIPTION
+  start F5 ATC declaration REST API Service
+```
+
+_See code: [dist/commands/service.ts](https://github.com/DumpySquare/f5-declaration-validator/blob/v1.0.0/dist/commands/service.ts)_
+
+## `f5-dv validate [DEC]`
+
+validate F5 ATC declaration
+
+```
+USAGE
+  $ f5-dv validate [DEC] [--json] [-h] [-f <value>]
+
+FLAGS
+  -f, --file=<value>  f5 atc declaration file
+  -h, --help          Show CLI help.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  validate F5 ATC declaration
+```
+
+_See code: [dist/commands/validate.ts](https://github.com/DumpySquare/f5-declaration-validator/blob/v1.0.0/dist/commands/validate.ts)_
+
+## `f5-dv version`
+
+```
+USAGE
+  $ f5-dv version
+```
+
+_See code: [@oclif/plugin-version](https://github.com/oclif/plugin-version/blob/v1.0.4/src/commands/version.ts)_
+<!-- commandsstop -->
+
 ## examples
 
 ### validate as3 declaration

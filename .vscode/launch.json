@@ -42,15 +42,19 @@
             "name": "Debug current test",
             "type": "node",
             "request": "launch",
+            "env": {
+                "DEBUG": "*"
+            },
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
+                "tests/helpers/init.js",
                 "-r",
                 "ts-node/register",
                 "--no-timeout",
                 "--colors",
                 "${file}",
             ],
-            "internalConsoleOptions": "neverOpen",
+            "internalConsoleOptions": "openOnSessionStart",
             "protocol": "inspector",
         },
 
