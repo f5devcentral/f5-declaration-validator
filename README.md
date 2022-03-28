@@ -60,6 +60,8 @@ For example;  If a certificate body is found in a declaration.  While it is tech
 - extending schema validation with suggestions #126
   - <https://github.com/microsoft/vscode-json-languageservice/issues/126>
 
+> Please open an issue/rfe for any rule suggestions!
+
 ## AS3 Linting Rules
 
 ### Orphaned Objects
@@ -68,7 +70,7 @@ For example;  If a certificate body is found in a declaration.  While it is tech
 
 ### IP Address input validation
 
-- **pending Greg feedback**-
+- **pending more feedback**
 
 ### Certificate/key in declaration body
 
