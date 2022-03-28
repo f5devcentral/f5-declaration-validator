@@ -9,6 +9,16 @@ code-name: vera (italian for "true")
 - [Welcome to f5-declaration-validator](#welcome-to-f5-declaration-validator)
   - [Research](#research)
   - [Solution](#solution)
+  - [Linting - Extended Diagnostics](#linting---extended-diagnostics)
+  - [AS3 Linting Rules](#as3-linting-rules)
+    - [Orphaned Objects](#orphaned-objects)
+    - [IP Address input validation](#ip-address-input-validation)
+    - [Certificate/key in declaration body](#certificatekey-in-declaration-body)
+  - [examples](#examples)
+    - [validate as3 declaration](#validate-as3-declaration)
+  - [Future Enhancements](#future-enhancements)
+    - [_not prioritized_](#not-prioritized)
+  - [TerraForm TASKS integration info](#terraform-tasks-integration-info)
   - [Usage](#usage)
   - [Commands](#commands)
   - [`f5dv commands`](#f5dv-commands)
@@ -16,19 +26,9 @@ code-name: vera (italian for "true")
   - [`f5dv service`](#f5dv-service)
   - [`f5dv validate [DEC]`](#f5dv-validate-dec)
   - [`f5dv version`](#f5dv-version)
-  - [examples](#examples)
-    - [validate as3 declaration](#validate-as3-declaration)
-  - [Future Enhancements](#future-enhancements)
-    - [_not prioritized_](#not-prioritized)
   - [ATC declaration validation code references](#atc-declaration-validation-code-references)
   - [AVJ engine](#avj-engine)
   - [vscode-json-languageservice engine](#vscode-json-languageservice-engine)
-  - [Linting - Extended Diagnostics](#linting---extended-diagnostics)
-  - [AS3 Linting Rules](#as3-linting-rules)
-    - [Orphaned Objects](#orphaned-objects)
-    - [IP Address input validation](#ip-address-input-validation)
-    - [Certificate/key in declaration body](#certificatekey-in-declaration-body)
-  - [TerraForm TASKS integration info](#terraform-tasks-integration-info)
   - [support](#support)
 
 ## Research
@@ -50,6 +50,67 @@ This projects contributes the following;
   - /info - endpoint for providing information about the project/package
     - Any unknown api endpoint request will get redirected here
     - Also includes a listing of all api endpoints for quick visibility
+
+## Linting - Extended Diagnostics
+
+The idea here is to extend the json validation with linting daignostics to provide insights on recommended/not-recommneded configuration options/combinations
+
+For example;  If a certificate body is found in a declaration.  While it is technically supported, it is recommended to manage certs through a secret store the declration should reference
+
+- extending schema validation with suggestions #126
+  - <https://github.com/microsoft/vscode-json-languageservice/issues/126>
+
+## AS3 Linting Rules
+
+### Orphaned Objects
+
+- Detect if AS3 object has been created, but not refereced
+
+### IP Address input validation
+
+- **pending Greg feedback**-
+
+### Certificate/key in declaration body
+
+- Detect if certificate/key detected in declartion body and suggest using a secret store
+
+## examples
+
+### validate as3 declaration
+
+```bash
+
+```
+
+## Future Enhancements
+
+### _not prioritized_
+
+- Extended schema "linting/recommendations"
+  - See linting section
+- Telemetry
+- CLI for consumption flexibility and git action integration
+- containerize for orchestration
+- Round out support for DO/TS and even DWAF
+- Host in F5 Distributed Cloud?
+- UI?
+  - paste declaration and see the output
+- SWAGGER file?
+
+## TerraForm TASKS integration info
+
+One need is to integrate this tool with TerraForm Tasks to provide more planning intelligence.  Documentation on how to do this is blow.
+
+During discussions someone asked if we could bake this into the TF provider and not have to have an external service?
+
+- Blog: Terraform Cloud Run Tasks Beta Now Available
+  - <https://www.hashicorp.com/blog/terraform-cloud-run-tasks-beta-now-available>
+- Terraform Cloud Run Tasks
+  - <https://www.terraform.io/cloud-docs/workspaces/settings/run-tasks>
+- Terraform Cloud Run Tasks API
+  - <https://www.terraform.io/cloud-docs/api-docs/run-tasks>
+- Terraform Cloud Run Tasks Integration
+  - <https://www.terraform.io/cloud-docs/integrations/run-tasks>
 
 ## Usage
 
@@ -178,29 +239,6 @@ USAGE
 _See code: [@oclif/plugin-version](https://github.com/oclif/plugin-version/blob/v1.0.4/src/commands/version.ts)_
 <!-- commandsstop -->
 
-## examples
-
-### validate as3 declaration
-
-```bash
-
-```
-
-## Future Enhancements
-
-### _not prioritized_
-
-- Extended schema "linting/recommendations"
-  - See linting section
-- Telemetry
-- CLI for consumption flexibility and git action integration
-- containerize for orchestration
-- Round out support for DO/TS and even DWAF
-- Host in F5 Distributed Cloud?
-- UI?
-  - paste declaration and see the output
-- SWAGGER file?
-
 ## ATC declaration validation code references
 
 - The once available as3 declaration validator
@@ -251,44 +289,6 @@ The benefits;
 - provides very nice errors and error line pointers
 - I **think** this method can be extended to provide "linting" like inspection to the declaration also
   - See linting section
-
-## Linting - Extended Diagnostics
-
-The idea here is to extend the json validation with linting daignostics to provide insights on recommended/not-recommneded configuration options/combinations
-
-For example;  If a certificate body is found in a declaration.  While it is technically supported, it is recommended to manage certs through a secret store the declration should reference
-
-- extending schema validation with suggestions #126
-  - <https://github.com/microsoft/vscode-json-languageservice/issues/126>
-
-## AS3 Linting Rules
-
-### Orphaned Objects
-
-Detect if AS3 object has been created, but not refereced
-
-### IP Address input validation
-
--**pending Greg feedback**-
-
-### Certificate/key in declaration body
-
-Detect if certificate/key detected in declartion body and suggest using a secret store
-
-## TerraForm TASKS integration info
-
-One need is to integrate this tool with TerraForm Tasks to provide more planning intelligence.  Documentation on how to do this is blow.
-
-During discussions someone asked if we could bake this into the TF provider and not have to have an external service?
-
-- Blog: Terraform Cloud Run Tasks Beta Now Available
-  - <https://www.hashicorp.com/blog/terraform-cloud-run-tasks-beta-now-available>
-- Terraform Cloud Run Tasks
-  - <https://www.terraform.io/cloud-docs/workspaces/settings/run-tasks>
-- Terraform Cloud Run Tasks API
-  - <https://www.terraform.io/cloud-docs/api-docs/run-tasks>
-- Terraform Cloud Run Tasks Integration
-  - <https://www.terraform.io/cloud-docs/integrations/run-tasks>
 
 ## support
 
