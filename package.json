@@ -10,8 +10,13 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' 'tests/**/*.{js,ts,tsx}'",
     "watch": "tsc -watch -p ./",
+    "build": "rm -rf dist && tsc -b",
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "npm run lint",
+    "prepack": "npm run build && npx oclif manifest && npx oclif readme",
+    "version": "npx oclif readme && git add README.md",
     "compile": "tsc -p ./",
-    "server": "dist/app.js",
+    "start": "dist/app.js",
     "test": "nyc --extension .ts mocha --timeout 20000 --forbid-only \"tests/**/*.tests.ts\"",
     "dev:debug": "nodemon --inspect src/app.ts",
     "build-package": "npm run compile && npm pack",
@@ -27,7 +32,7 @@
     "url": "https://github.com/DumpySquare/f5-declaration-validator/issues"
   },
   "oclif": {
-    "bin": "f5-dv",
+    "bin": "f5dv",
     "commands": "./dist/commands",
     "additionalHelpFlags": [
       "-h"
@@ -80,6 +85,7 @@
     "nock": "^13.2.1",
     "nodemon": "^2.0.15",
     "nyc": "^15.1.0",
+    "oclif": "^2.5.0",
     "ts-node": "^9.1.1",
     "typedoc": "^0.22.11",
     "typescript": "^4.2.4"

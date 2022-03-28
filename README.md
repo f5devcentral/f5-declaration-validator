@@ -6,6 +6,31 @@ The idea is to provide a tool/function that will validate ANY f5 declaration.  A
 
 code-name: vera (italian for "true")
 
+- [Welcome to f5-declaration-validator](#welcome-to-f5-declaration-validator)
+  - [Research](#research)
+  - [Solution](#solution)
+  - [Usage](#usage)
+  - [Commands](#commands)
+  - [`f5dv commands`](#f5dv-commands)
+  - [`f5dv help [COMMAND]`](#f5dv-help-command)
+  - [`f5dv service`](#f5dv-service)
+  - [`f5dv validate [DEC]`](#f5dv-validate-dec)
+  - [`f5dv version`](#f5dv-version)
+  - [examples](#examples)
+    - [validate as3 declaration](#validate-as3-declaration)
+  - [Future Enhancements](#future-enhancements)
+    - [_not prioritized_](#not-prioritized)
+  - [ATC declaration validation code references](#atc-declaration-validation-code-references)
+  - [AVJ engine](#avj-engine)
+  - [vscode-json-languageservice engine](#vscode-json-languageservice-engine)
+  - [Linting - Extended Diagnostics](#linting---extended-diagnostics)
+  - [AS3 Linting Rules](#as3-linting-rules)
+    - [Orphaned Objects](#orphaned-objects)
+    - [IP Address input validation](#ip-address-input-validation)
+    - [Certificate/key in declaration body](#certificatekey-in-declaration-body)
+  - [TerraForm TASKS integration info](#terraform-tasks-integration-info)
+  - [support](#support)
+
 ## Research
 
 Two different packages are explored within this tool.  
@@ -31,13 +56,13 @@ This projects contributes the following;
 <!-- usage -->
 ```sh-session
 $ npm install -g f5-declaration-validator
-$ f5-dv COMMAND
+$ f5dv COMMAND
 running command...
-$ f5-dv (--version|-v)
-f5-declaration-validator/1.0.0 linux-x64 node-v14.18.2
-$ f5-dv --help [COMMAND]
+$ f5dv (--version|-v)
+f5-declaration-validator/1.1.0 linux-x64 node-v16.14.0
+$ f5dv --help [COMMAND]
 USAGE
-  $ f5-dv COMMAND
+  $ f5dv COMMAND
 ...
 ```
 <!-- usagestop -->
@@ -45,19 +70,19 @@ USAGE
 ## Commands
 
 <!-- commands -->
-* [`f5-dv commands`](#f5-dv-commands)
-* [`f5-dv help [COMMAND]`](#f5-dv-help-command)
-* [`f5-dv service`](#f5-dv-service)
-* [`f5-dv validate [DEC]`](#f5-dv-validate-dec)
-* [`f5-dv version`](#f5-dv-version)
+- [`f5dv commands`](#f5dv-commands)
+- [`f5dv help [COMMAND]`](#f5dv-help-command)
+- [`f5dv service`](#f5dv-service)
+- [`f5dv validate [DEC]`](#f5dv-validate-dec)
+- [`f5dv version`](#f5dv-version)
 
-## `f5-dv commands`
+## `f5dv commands`
 
 list all the commands
 
-```
+```bash
 USAGE
-  $ f5-dv commands [--json] [-h] [--hidden] [--columns <value> | -x] [--sort <value>] [--filter <value>]
+  $ f5dv commands [--json] [-h] [--hidden] [--columns <value> | -x] [--sort <value>] [--filter <value>]
     [--output csv|json|yaml |  | [--csv | --no-truncate]] [--no-header | ]
 
 FLAGS
@@ -82,13 +107,13 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v2.1.0/src/commands/commands.ts)_
 
-## `f5-dv help [COMMAND]`
+## `f5dv help [COMMAND]`
 
-Display help for f5-dv.
+Display help for f5dv.
 
-```
+```bash
 USAGE
-  $ f5-dv help [COMMAND] [-n]
+  $ f5dv help [COMMAND] [-n]
 
 ARGUMENTS
   COMMAND  Command to show help for.
@@ -97,18 +122,18 @@ FLAGS
   -n, --nested-commands  Include all nested commands in the output.
 
 DESCRIPTION
-  Display help for f5-dv.
+  Display help for f5dv.
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.11/src/commands/help.ts)_
 
-## `f5-dv service`
+## `f5dv service`
 
 start F5 ATC declaration REST API Service
 
-```
+```bash
 USAGE
-  $ f5-dv service [-h] [-p <value>] [-c <value>] [-k <value>]
+  $ f5dv service [-h] [-p <value>] [-c <value>] [-k <value>]
 
 FLAGS
   -c, --cert=<value>  path to cert
@@ -120,15 +145,15 @@ DESCRIPTION
   start F5 ATC declaration REST API Service
 ```
 
-_See code: [dist/commands/service.ts](https://github.com/DumpySquare/f5-declaration-validator/blob/v1.0.0/dist/commands/service.ts)_
+_See code: [dist/commands/service.ts](https://github.com/DumpySquare/f5-declaration-validator/blob/v1.1.0/dist/commands/service.ts)_
 
-## `f5-dv validate [DEC]`
+## `f5dv validate [DEC]`
 
 validate F5 ATC declaration
 
-```
+```bash
 USAGE
-  $ f5-dv validate [DEC] [--json] [-h] [-f <value>]
+  $ f5dv validate [DEC] [--json] [-h] [-f <value>]
 
 FLAGS
   -f, --file=<value>  f5 atc declaration file
@@ -141,13 +166,13 @@ DESCRIPTION
   validate F5 ATC declaration
 ```
 
-_See code: [dist/commands/validate.ts](https://github.com/DumpySquare/f5-declaration-validator/blob/v1.0.0/dist/commands/validate.ts)_
+_See code: [dist/commands/validate.ts](https://github.com/DumpySquare/f5-declaration-validator/blob/v1.1.0/dist/commands/validate.ts)_
 
-## `f5-dv version`
+## `f5dv version`
 
-```
+```bash
 USAGE
-  $ f5-dv version
+  $ f5dv version
 ```
 
 _See code: [@oclif/plugin-version](https://github.com/oclif/plugin-version/blob/v1.0.4/src/commands/version.ts)_
@@ -163,7 +188,7 @@ _See code: [@oclif/plugin-version](https://github.com/oclif/plugin-version/blob/
 
 ## Future Enhancements
 
-### *not prioritized*
+### _not prioritized_
 
 - Extended schema "linting/recommendations"
   - See linting section
@@ -224,7 +249,7 @@ The benefits;
     - validation works in vscode, but not directly through this project #125
       - <https://github.com/microsoft/vscode-json-languageservice/issues/125>
 - provides very nice errors and error line pointers
-- I ***think*** this method can be extended to provide "linting" like inspection to the declaration also
+- I **think** this method can be extended to provide "linting" like inspection to the declaration also
   - See linting section
 
 ## Linting - Extended Diagnostics
@@ -235,6 +260,20 @@ For example;  If a certificate body is found in a declaration.  While it is tech
 
 - extending schema validation with suggestions #126
   - <https://github.com/microsoft/vscode-json-languageservice/issues/126>
+
+## AS3 Linting Rules
+
+### Orphaned Objects
+
+Detect if AS3 object has been created, but not refereced
+
+### IP Address input validation
+
+-**pending Greg feedback**-
+
+### Certificate/key in declaration body
+
+Detect if certificate/key detected in declartion body and suggest using a secret store
 
 ## TerraForm TASKS integration info
 
