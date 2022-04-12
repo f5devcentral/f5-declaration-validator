@@ -12,6 +12,7 @@ code-name: vera (italian for "true")
   - [Linting - Extended Diagnostics](#linting---extended-diagnostics)
   - [AS3 Linting Rules](#as3-linting-rules)
     - [Orphaned Objects](#orphaned-objects)
+    - [no Common/Shared](#no-commonshared)
     - [IP Address input validation](#ip-address-input-validation)
     - [Certificate/key in declaration body](#certificatekey-in-declaration-body)
   - [examples](#examples)
@@ -67,6 +68,10 @@ For example;  If a certificate body is found in a declaration.  While it is tech
 ### Orphaned Objects
 
 - Detect if AS3 object has been created, but not refereced
+
+### no Common/Shared
+
+- Try not to put objects into Common/Shared since it goes agains the declartive model by introducing dependencies
 
 ### IP Address input validation
 
