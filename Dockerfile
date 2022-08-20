@@ -3,39 +3,35 @@
 # https://simplernerd.com/docker-typescript-production/
 
 
-FROM node:14-alpine3.10 as ts-compiler
-# FROM node:14.18.2
-# ENV NODE_ENV=production
+# https://towardsdev.com/writing-a-docker-file-for-your-node-js-typescript-micro-service-c5170b957893
 
-# USER node
-
-WORKDIR /app
-
-# RUN chown node /app
-
-COPY ["package.json", "package-lock.json*", "./"]
-
-# RUN npm install --production
-RUN npm ci
-
-COPY . .
-
+FROM node:14-alpine3.10 as builder
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+COPY package*.json ./
+RUN npm config set unsafe-perm true
+RUN npm install -g typescript
+RUN npm install -g ts-node
+USER node
+RUN npm install
+COPY --chown=node:node . .
 RUN npm run compile
 
+# STAGE 2
+FROM node:14-alpine
+# install openssl so we can gen the cert on demand
+RUN apk --update add openssl && mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+# copy project from builder
+COPY --from=builder /home/node/app ./
+# change to node user
+USER node
+# install node packages production only (no dev-deps)
+RUN npm install --production
 
-FROM node:14-alpine3.10 as ts-remover
-WORKDIR /app
-COPY --from=ts-compiler /app/package*.json ./
-COPY --from=ts-compiler /app/dist ./
-RUN npm install --only=production
+# this two stage process only cuts down on the node dev-dependencies.  The final container can further be slimmed by only moving the neccessary files for it to run
+# package.json package-lock.json and dist/*.js
+# https://stackoverflow.com/questions/37715224/copy-multiple-directories-with-one-command
 
-
-FROM gcr.io/distroless/nodejs:14
-EXPOSE 3030
-COPY --from=ts-remover /app ./
-USER 1000
-# CMD [ "npm", "run", "start" ]
-CMD [ "app.js" ]
-
-STOPSIGNAL SIGQUIT
-
+EXPOSE 8443
+CMD [ "node", "dist/app.js", "8443" ]
