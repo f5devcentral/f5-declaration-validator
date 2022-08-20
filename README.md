@@ -119,6 +119,42 @@ During discussions someone asked if we could bake this into the TF provider and 
 - Terraform Cloud Run Tasks Integration
   - <https://www.terraform.io/cloud-docs/integrations/run-tasks>
 
+
+## Docker Container
+
+The docker container runs very similar to the cli.  It is TLS encrypted by default (a default cert is generated at launch).
+
+Run the following commands to build the containter, then run it
+
+```bash
+
+# clone the repo
+git clone https://github.com/f5devcentral/f5-declaration-validator.git
+
+# build the container
+docker build -t f5dv .
+
+# run the container
+docker run -p 8443:8443 f5dv
+
+```
+
+### test container connectivity
+
+The following commands will show that the container is running and ready
+
+```bash
+ted@majw:~/f5-declaration-validator$ curl -kL https://localhost:8443
+{"appName":"f5-declaration-validator","version":"1.1.0","license":"Apache-2.0","homepage":"https://github.com/DumpySquare/f5-declaration-validator#readme","routes":["/exit","/info","/validate"]}
+ 
+ted@majw:~/f5-declaration-validator$ curl -kL https://localhost:8443/exit
+
+quitting -> goodbye!
+
+ted@majw:~/f5-declaration-validator$ 
+
+```
+
 ## Usage
 
 <!-- usage -->
