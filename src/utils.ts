@@ -109,6 +109,21 @@ export async function decType(dec: Record<string, unknown>): Promise<{
     }
 }
 
+export type TFplan = {
+    resource_changes: [
+        {
+            type: string,
+            change: string,
+        }
+    ]
+}
+
+
+export function decFromPlan(plan: TFplan): Record<string, unknown> {
+
+    return {}
+}
+
 
 // function getSchema(type: ParentClasses) {
 //     if(type === 'AS3') return as3Schema;
